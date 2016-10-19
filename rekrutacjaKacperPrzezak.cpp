@@ -7,9 +7,15 @@
 #include <algorithm>
 #include <iterator>
 #include <limits>
+#include <string.h>
+
+using namespace std;
+
 
 struct indexMaxNeighbor
 {
+public:
+
 	unsigned int minValueIndex;
 	unsigned int maxLeftIndex ;
 	unsigned int maxRightIndex ;
@@ -17,9 +23,10 @@ struct indexMaxNeighbor
 
 	indexMaxNeighbor()
 	{
+		minValueIndex = NULL;
 		maxLeftIndex = NULL;
 		maxRightIndex = NULL;
-		minValueIndex = NULL;
+
 	}
 
 	indexMaxNeighbor(unsigned int minValueIndexArg, unsigned int maxLeftIndexArg,unsigned int maxRightIndexArg)
@@ -29,9 +36,10 @@ struct indexMaxNeighbor
 		maxRightIndex = maxRightIndexArg;
 
 	}
+
 };
 
-using namespace std;
+//obs³u¿yc przypadki brzegowe
 
 int size = 10;
 unsigned maxValue = 20;
@@ -40,7 +48,10 @@ unsigned int minValue ;
 
 vector<unsigned int> valueVector;
 vector<unsigned int> indexesOfMinVector;
-vector<indexMaxNeighbor> maxNeighbourIndex;
+vector<indexMaxNeighbor> maxNeighbourIndexVector;
+
+vector<int> sizeofValleys;
+
 
 void initVectorWithRandomValue()
 {
@@ -78,6 +89,17 @@ void printContentOfVector()
 	}
 
 	cout<<"\nend of vector content\n\n";
+}
+
+void printMaxNeighbourIndexVector()
+{	
+
+	for(int i =0 ;i<maxNeighbourIndexVector.size();i++)
+	{
+		indexMaxNeighbor neighbor = maxNeighbourIndexVector[i];
+		cout<<"\nindex "<<neighbor.minValueIndex<<"\tLeft max index "<<neighbor.maxLeftIndex
+			<<"\tRight max index "<<neighbor.maxRightIndex<<endl;
+	}
 }
 
 unsigned int getMinValue()
@@ -178,11 +200,31 @@ void initNeighbourhoodVector()
 
 		tempMaxRightNeighborIndex = getMaxRightNeighborIndex(indexesOfMinVector[i]);
 
+		maxNeighbourIndexVector.push_back(indexMaxNeighbor(indexesOfMinVector[i],tempMaxLeftNeighborIndex,tempMaxRightNeighborIndex));
 	}
 
 
 }
 
+int spaceForWater()
+{
+
+	//alorytm: wartosc mniejszego z maksimów(lewe,prawe) dla minimum lokalnego * ilosc elementów(s³upków) - suma wartosci s³upków
+
+	for (int i = 0 ; i < maxNeighbourIndexVector.size(); i++)
+	{
+
+		indexMaxNeighbor item = maxNeighbourIndexVector[i];
+		
+		int wartoscMniejszegoMaksimum = min(valueVector[item.maxLeftIndex],valueVector[item.maxRightIndex]);
+
+
+	}
+
+	//change this
+	return 0;
+
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
 
@@ -199,6 +241,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	
 	initNeighbourhoodVector();
+
+	printMaxNeighbourIndexVector();
 
 
 	
